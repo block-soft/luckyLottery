@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        a label { cursor: pointer; }
+    </style>
+</head>
+<body>
+<nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">LuckyHub: MVP</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="#">Navbar Link</a></li>
+        </ul>
+        <ul id="nav-mobile" class="sidenav">
+            <li><a href="#">Navbar Link</a></li>
+        </ul>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+
+<div class="container" id="loading">
+    <div class="section no-pad-bot">
+        <div class="container">
+            <br><br>
+            <h4 class="header center orange-text">Loading</h4>
+            <div class="row center">
+                <h5 class="header col s12 light">Requirements</h5>
+                <ul class="collection">
+                    <li class="collection-item">
+                        <i id="loadingCheck1" class="material-icons tiny check red-text">check</i>
+                        <label id="loadingText1" class="red-text">Metamask should be installed</label>
+                    </li>
+                    <li class="collection-item">
+                        <i id="loadingCheck2" class="material-icons tiny check red-text">check</i>
+                        <label id="loadingText2" class="red-text">Metamask accounts should be unlocked</label>
+                    </li>
+                    <li class="collection-item">
+                        <i id="loadingCheck3" class="material-icons tiny check red-text">check</i>
+                        <label id="loadingText3" class="red-text">Ropsten Testnet should be selected</label>
+                    </li>
+                    <li class="collection-item">
+                        <i id="loadingCheck4" class="material-icons tiny check red-text">check</i>
+                        <label id="loadingText4" class="red-text">IPFS Node should be connected <span id="ipfsID"></span></label>
+                    </li>
+                </ul>
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-orange">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <br><br>
+        </div>
+    </div>
+</div>
+
+<div id="loaded" style="display:none">
+    <div class="section no-pad-bot">
+        <div class="container">
+            <br><br>
+            <h4 class="header center orange-text"><span id="loadedAccount"></span></h4>
+            <div class="row center">
+                <ul class="collection">
+                    <li class="collection-item">
+                        <i id="loadedCheck1"
+                           class="material-icons tiny check red-text">check</i>
+                        <label id="loadedText1" class="red-text">Public Key should be stored</label>
+                        <div id="rsaModalTxWaiting" style="display: none">
+                            Waiting for Transaction <span id="rsaModalTxWaitingLink"></span>
+                        </div>
+                    </li>
+                    <li class="collection-item">
+                        <i id="loadedCheck4" class="material-icons tiny check red-text">check</i>
+                        <label id="loadedText4" class="red-text">IPFS Node should be connected <span id="ipfsID2"></span></label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <div class="row">
+                <div class="col s12 m6 center">
+                    <h6><a href="#" onclick="createNewLotteryModal(); return false;">Create Lottery</a></h6>
+                    <h6>already created</h6>
+                    <div id="lotteriesTxWaiting" style="display: none">
+                        Waiting for Transaction <span id="lotteriesTxWaitingLink">12321321341354123213213413541232132134135412321321341354</span>
+                    </div>
+                    <div id="lotteriesLoading" class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-orange">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="lotteriesLoaded">
+                        Loading
+                    </div>
+                </div>
+                <div class="col s12 m6 center">
+                    <h6 id="menuStep1">
+                        <a href="#" onclick="buyTicketModal(); return false;">Step 1. Buy Ticket</a>
+                    </h6>
+                    <h6 id="menuStep2">
+                       <a href="#" onclick="gotWinner(); return false;" style="display: none">Step 2. Find a Winner</a>
+                    </h6>
+                    <h6 id="menuStep3">
+                        <a href="#" onclick="createNewMessageModal(); return false;">Step 3. Contact Owner </a>
+                        and <a href="#" onclick="allowEscrow(); return false;">Confirm Prize and Unlock Money to Owner </a>
+                    </h6>
+                    <h6 id="menuStep3_2">
+                        <a href="#" onclick="createNewMessageModal(); return false;">Step 3. Contact Winner (only owner could read / write)</a>
+                    </h6>
+                    <h6 id="menuStep4">
+                        <a href="#" onclick="escrow(); return false;">Step 4. Escrow Money to Owner </a>
+                    </h6>
+                    <h6 id="menuStep5">
+                        <a href="#" onclick="return false;">Lottery is Finished and Destructed </a>
+                    </h6>
+                    <h6>current status</h6>
+                    <div id="ticketsTxWaiting" style="display: none">
+                        Waiting for Transaction <span id="ticketsTxWaitingLink"></span>
+                    </div>
+                    <div id="ticketsLoading" class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-orange">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="ticketsLoaded">
+                        Loading
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+    </div>
+</div>
+
+
+<footer class="page-footer orange">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">LuckyHub</h5>
+                <p class="grey-text text-lighten-4">Some description will be here,
+                    <a href="https://github.com/travist/jsencrypt" target="_blank" class="white-text pink accent-4">RSA lib used</a>
+                </p>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Info</h5>
+                <ul>
+                    <li><a class="white-text" target="_blank"
+                           href="https://ropsten.etherscan.io/address/0x43d928330c365056232bdd3bd3f88e5d06f0cfbf">Lotteries
+                        Contract</a></li>
+                    <li><a class="white-text" target="_blank"
+                           href="https://ropsten.etherscan.io/address/0xc4574d249e6b64c235fec4cc3daed0a1e4f569b3">Members
+                        Contract</a></li>
+                </ul>
+            </div>
+            <div class="col l3 s12">
+                <h5 class="white-text">Connect</h5>
+                <ul>
+                    <li><a class="white-text" href="https://telegram.me/vadymhr" target="_blank">@VadymHr</a></li>
+                    <li><a class="white-text" href="https://telegram.me/turtus" target="_blank">@Turtus</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            Made by <a class="orange-text text-lighten-3" href="http://blocksoft.bix">Blocksoft</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal Structure -->
+<div id="rsaModal" class="modal">
+    <div class="modal-content">
+        <h4>RSA Generation in progress</h4>
+        <div id="rsaModalLoading" class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-orange">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div id="rsaModalLoaded">
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" onclick="savePublicPrivate(); return false;" class="waves-effect waves-light btn"><i
+                class="material-icons left">cloud</i>Send Public Key to the Contract</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Close</a>
+    </div>
+</div>
+
+<div id="newLotteryModal" class="modal">
+    <div class="modal-content">
+        <h4>Lottery Creation</h4>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="newLotteryModalName" type="text" value="Demo Lottery" class="validate">
+                <label for="newLotteryModalName">Name (visible for all)</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s6">
+                <input id="newLotteryModalTickets" type="text" value="10" class="validate">
+                <label for="newLotteryModalTickets">Tickets Total Number</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="newLotteryModalTicketPrice" type="text" value="0.01" class="validate">
+                <label for="newLotteryModalTicketPrice">Ticket Price (ETH)</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" onclick="saveNewLotteryModal(); return false;" class="waves-effect waves-light btn"><i
+                class="material-icons left">cloud</i>Create Lottery in Contract</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Close</a>
+    </div>
+</div>
+
+<div id="buyTicketModal" class="modal">
+    <div class="modal-content">
+        <h4>Buy Ticket</h4>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="buyTicketModalNumber" type="text" class="validate" value="1">
+                <label for="buyTicketModalNumber">Number of Tickets to Buy, current price = <span id="buyTicketModalPrice"></span> per Ticket</label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" onclick="saveBuyTicketModal(); return false;" class="waves-effect waves-light btn"><i
+                class="material-icons left">cloud</i>Buy</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Close</a>
+    </div>
+</div>
+
+<div id="newMessageModal" class="modal">
+    <div class="modal-content">
+        <h4>New Message Add</h4>
+        <div id="newMessageModalTxWaiting" style="display: none">
+            Waiting for Transaction <span id="newMessageModalTxWaitingLink">12321321341354123213213413541232132134135412321321341354</span>
+        </div>
+        <div id="newMessageModalLoading" class="preloader-wrapper big active" style="display: none; position: absolute">
+            <div class="spinner-layer spinner-orange">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea class="materialize-textarea" id="newMessageModalText"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div id="messagesLoading" class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-orange">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="messagesLoaded">
+                Loading
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" onclick="saveNewMessageModal(); return false;" class="waves-effect waves-light btn"><i
+                class="material-icons left">cloud</i>Encrypt Message and Send to Owner</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">Close</a>
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://unpkg.com/ipfs-http-client/dist/index.min.js"></script>
+<script src="./js/rsa/jsencrypt.min.js"></script>
+<script src="./js/index.js"></script>
+<script src="./js/htmls/members.js"></script>
+<script src="./js/htmls/lotteries.js"></script>
+<script src="./js/htmls/tickets.js"></script>
+<script src="./js/htmls/messages.js"></script>
+<script>
+    window.addEventListener('load', function () {
+        init();
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const elems = document.querySelectorAll('.modal');
+        const instances = M.Modal.init(elems, {});
+    });
+</script>
+</body>
+</html>
